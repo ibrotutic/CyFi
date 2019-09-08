@@ -1,52 +1,73 @@
 package com.example.cyfi;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.view.MenuItem;
 
+import com.example.cyfi.current_wifi.CurrentWifiFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
+    final Fragment currentConnectionFragment = new CurrentWifiFragment();
+    final Fragment routerFragment = new ScanNetworksFragment();
+    final Fragment scanNetworksFragment = new RouterPictureFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment displayedFragment = currentConnectionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(R.string.current_connection_information);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        fm.beginTransaction().add(R.id.main_container, scanNetworksFragment, "scan-networks").hide(scanNetworksFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, routerFragment, "router-info").hide(routerFragment).commit();
+        fm.beginTransaction().add(R.id.main_container, currentConnectionFragment, "current-connection").commit();
+
+    }
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.current_connection:
+                    fm.beginTransaction().hide(displayedFragment).show(currentConnectionFragment).commit();
+                    displayedFragment = currentConnectionFragment;
+                    toolbar.setTitle(R.string.current_connection_information);
+                    return true;
+
+                case R.id.scan_networks:
+                    fm.beginTransaction().hide(displayedFragment).show(scanNetworksFragment).commit();
+                    displayedFragment = scanNetworksFragment;
+                    toolbar.setTitle(R.string.recommend_a_network);
+                    return true;
+
+                case R.id.router_info:
+                    fm.beginTransaction().hide(displayedFragment).show(routerFragment).commit();
+                    displayedFragment = routerFragment;
+                    toolbar.setTitle(R.string.ap_information);
+                    return true;
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            return false;
         }
+    };
 
-        return super.onOptionsItemSelected(item);
-    }
+
 }
