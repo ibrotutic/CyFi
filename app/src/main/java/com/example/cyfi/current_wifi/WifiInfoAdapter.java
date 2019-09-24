@@ -10,16 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cyfi.R;
+import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
 
 import java.util.List;
 
 public class WifiInfoAdapter extends
         RecyclerView.Adapter<WifiInfoAdapter.ViewHolder> {
 
-    List<WifiInfo> wifiInfo;
+    List<WifiInfoItem> wifiInfoItem;
 
-    public WifiInfoAdapter(List<WifiInfo> wifiInfo) {
-        this.wifiInfo = wifiInfo;
+    public WifiInfoAdapter(List<WifiInfoItem> wifiInfoItem) {
+        this.wifiInfoItem = wifiInfoItem;
     }
 
     @NonNull
@@ -33,9 +34,14 @@ public class WifiInfoAdapter extends
         return new ViewHolder(wifiInfoView);
     }
 
+    public void setData(List<WifiInfoItem> wifiInfoItems) {
+        this.wifiInfoItem = wifiInfoItems;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WifiInfo contact = wifiInfo.get(position);
+        WifiInfoItem contact = wifiInfoItem.get(position);
 
         TextView propertyName = holder.propertyName;
         propertyName.setText(contact.getPropertyName());
@@ -46,7 +52,7 @@ public class WifiInfoAdapter extends
 
     @Override
     public int getItemCount() {
-        return wifiInfo.size();
+        return wifiInfoItem.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
