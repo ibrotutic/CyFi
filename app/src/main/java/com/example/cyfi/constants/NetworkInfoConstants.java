@@ -9,6 +9,7 @@ public final class NetworkInfoConstants {
     public static final String MAC_ADDRESS = "Mac Address";
     public static final String LINK_SPEED = "Link Speed";
     public static final String SIGNAL_STRENGTH = "Signal Strength";
+    public static final String SUPPLICANT_STATE = "Supplicant State";
 
     private NetworkInfoConstants() { }
 }

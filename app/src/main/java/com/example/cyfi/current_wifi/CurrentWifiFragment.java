@@ -1,7 +1,10 @@
 package com.example.cyfi.current_wifi;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +12,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +20,6 @@ import com.example.cyfi.R;
 import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,7 +61,6 @@ public class CurrentWifiFragment extends Fragment {
             if (progressBar.getVisibility() == View.VISIBLE) {
                 progressBar.setVisibility(View.GONE);
             }
-            getCurrentWifiInfoButton.setEnabled(true);
         }
         if (this.wifiInfo.getVisibility() == View.GONE) {
             if (progressBar.getVisibility() == View.VISIBLE) {
@@ -68,6 +68,7 @@ public class CurrentWifiFragment extends Fragment {
             }
             this.wifiInfo.setVisibility(View.VISIBLE);
         }
+        getCurrentWifiInfoButton.setEnabled(true);
         if (wifiInfoAdapter == null) {
             wifiInfoAdapter = new WifiInfoAdapter(null);
             this.wifiInfo.setAdapter(wifiInfoAdapter);

@@ -3,6 +3,8 @@
     package="com.example.cyfi">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature android:name="android.hardware.wifi" />
     <application
         android:allowBackup="true"

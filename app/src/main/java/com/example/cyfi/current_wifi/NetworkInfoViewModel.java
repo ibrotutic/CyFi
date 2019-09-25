@@ -1,6 +1,7 @@
 package com.example.cyfi.current_wifi;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -11,9 +12,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.cyfi.current_wifi.wifi_info.BSSIDItem;
 import com.example.cyfi.current_wifi.wifi_info.FrequencyItem;
 import com.example.cyfi.current_wifi.wifi_info.IPAddressItem;
+import com.example.cyfi.current_wifi.wifi_info.LinkSpeedItem;
 import com.example.cyfi.current_wifi.wifi_info.MacAddressItem;
 import com.example.cyfi.current_wifi.wifi_info.SSIDItem;
 import com.example.cyfi.current_wifi.wifi_info.SignalStrengthItem;
+import com.example.cyfi.current_wifi.wifi_info.SupplicantStateItem;
 import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
 
 import java.util.ArrayList;
@@ -32,12 +35,14 @@ public class NetworkInfoViewModel extends AndroidViewModel {
 
     private void initializeCurrentWifiInformation() {
         List<WifiInfoItem> wifiInfoItems = new ArrayList<>();
+        wifiInfoItems.add(new SupplicantStateItem(""));
         wifiInfoItems.add(new IPAddressItem(""));
         wifiInfoItems.add(new MacAddressItem(""));
         wifiInfoItems.add(new BSSIDItem(""));
         wifiInfoItems.add(new SSIDItem(""));
         wifiInfoItems.add(new FrequencyItem(""));
         wifiInfoItems.add(new SignalStrengthItem(""));
+        wifiInfoItems.add(new LinkSpeedItem(""));
         wifiInfoData.setValue(wifiInfoItems);
     }
 

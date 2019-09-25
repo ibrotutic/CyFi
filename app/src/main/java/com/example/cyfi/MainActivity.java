@@ -1,20 +1,27 @@
 package com.example.cyfi;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.MenuItem;
 
 import com.example.cyfi.current_wifi.CurrentWifiFragment;
+import com.example.cyfi.current_wifi.NetworkInfoViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION = 1;
+    private static final int WIFI_STATE_PERMISSION = 1;
     private Toolbar toolbar;
     final Fragment currentConnectionFragment = new CurrentWifiFragment();
     final Fragment routerFragment = new ScanNetworksFragment();
@@ -37,7 +44,24 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.main_container, scanNetworksFragment, "scan-networks").hide(scanNetworksFragment).commit();
         fm.beginTransaction().add(R.id.main_container, routerFragment, "router-info").hide(routerFragment).commit();
         fm.beginTransaction().add(R.id.main_container, currentConnectionFragment, "current-connection").commit();
+        checkAndRequestPermissions();
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == WIFI_STATE_PERMISSION) {
+            NetworkInfoViewModel networkInfoViewModel = ViewModelProviders.of(currentConnectionFragment).get(NetworkInfoViewModel.class);
+            networkInfoViewModel.updateWifiInfo();
+        }
+    }
+
+    private void checkAndRequestPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_WIFI_STATE}, WIFI_STATE_PERMISSION);
+        }
     }
 
 
