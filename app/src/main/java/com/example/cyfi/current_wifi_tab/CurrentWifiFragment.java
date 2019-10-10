@@ -1,9 +1,5 @@
-package com.example.cyfi.current_wifi;
+package com.example.cyfi.current_wifi_tab;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cyfi.R;
-import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

@@ -14,8 +14,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.view.MenuItem;
 
-import com.example.cyfi.current_wifi.CurrentWifiFragment;
-import com.example.cyfi.current_wifi.NetworkInfoViewModel;
+import com.example.cyfi.current_wifi_tab.CurrentWifiFragment;
+import com.example.cyfi.current_wifi_tab.NetworkInfoViewModel;
+import com.example.cyfi.picture_tab.RouterPictureFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.cyfi.current_wifi;
+package com.example.cyfi.current_wifi_tab;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cyfi.R;
-import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 
 import java.util.List;
 

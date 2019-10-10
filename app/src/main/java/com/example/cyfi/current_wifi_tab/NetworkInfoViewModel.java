@@ -1,7 +1,6 @@
-package com.example.cyfi.current_wifi;
+package com.example.cyfi.current_wifi_tab;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -9,15 +8,15 @@ import android.net.wifi.WifiManager;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cyfi.current_wifi.wifi_info.BSSIDItem;
-import com.example.cyfi.current_wifi.wifi_info.FrequencyItem;
-import com.example.cyfi.current_wifi.wifi_info.IPAddressItem;
-import com.example.cyfi.current_wifi.wifi_info.LinkSpeedItem;
-import com.example.cyfi.current_wifi.wifi_info.MacAddressItem;
-import com.example.cyfi.current_wifi.wifi_info.SSIDItem;
-import com.example.cyfi.current_wifi.wifi_info.SignalStrengthItem;
-import com.example.cyfi.current_wifi.wifi_info.SupplicantStateItem;
-import com.example.cyfi.current_wifi.wifi_info.WifiInfoItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.BSSIDItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.FrequencyItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.IPAddressItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.LinkSpeedItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.MacAddressItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.SSIDItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.SignalStrengthItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.SupplicantStateItem;
+import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 
 import java.util.ArrayList;
 import java.util.List;

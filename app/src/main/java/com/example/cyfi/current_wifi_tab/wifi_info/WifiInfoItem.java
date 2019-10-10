@@ -1,4 +1,4 @@
-package com.example.cyfi.current_wifi.wifi_info;
+package com.example.cyfi.current_wifi_tab.wifi_info;
 
 import android.net.wifi.WifiInfo;
 
