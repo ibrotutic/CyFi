@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int WIFI_STATE_PERMISSION = 1;
     private Toolbar toolbar;
     final Fragment currentConnectionFragment = new CurrentWifiFragment();
-    final Fragment routerFragment = new ScanNetworksFragment();
-    final Fragment scanNetworksFragment = new RouterPictureFragment();
+    final Fragment routerFragment = new RouterPictureFragment();
+    final Fragment scanNetworksFragment = new ScanNetworksFragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment displayedFragment = currentConnectionFragment;
 
@@ -50,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == WIFI_STATE_PERMISSION) {
-            NetworkInfoViewModel networkInfoViewModel = ViewModelProviders.of(currentConnectionFragment).get(NetworkInfoViewModel.class);
-            networkInfoViewModel.updateWifiInfo();
+        if (grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == WIFI_STATE_PERMISSION) {
+                NetworkInfoViewModel networkInfoViewModel = ViewModelProviders.of(currentConnectionFragment).get(NetworkInfoViewModel.class);
+                networkInfoViewModel.updateWifiInfo();
+            }
         }
     }
 
@@ -62,6 +64,15 @@ public class MainActivity extends AppCompatActivity {
         }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_WIFI_STATE}, WIFI_STATE_PERMISSION);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 2);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
         }
     }
 
