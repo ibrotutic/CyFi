@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -35,8 +38,9 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class RouterPictureFragment extends Fragment {
+    private boolean drawingEnabled = false;
     private FloatingActionButton startCameraButton;
-    private ImageView apImageView;
+    private DrawImageView apImageView;
     private TextView tabDescription;
     private ApImageViewModel apImageViewModel;
     private File imageLocation;
@@ -56,6 +60,28 @@ public class RouterPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ap_picture, container, false);
         apImageView = view.findViewById(R.id.image_preview);
+        apImageView.setOnTouchListener((v, event) -> {
+            DrawImageView drawView = (DrawImageView) v;
+
+            if (drawingEnabled) {
+                // set start coords
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    drawView.left = event.getX();
+                    drawView.top = event.getY();
+                    // set end coords
+                } else {
+                    drawView.right = event.getX();
+                    drawView.bottom = event.getY();
+                }
+                // draw
+                drawView.invalidate();
+                apImageViewModel.setCoordinates(drawView.top, drawView.bottom, drawView.left, drawView.right);
+                drawView.drawRect = true;
+            }
+
+            return true;
+        });
+
         coordinator = view.findViewById(R.id.coordinator);
         tabDescription = view.findViewById(R.id.image_instructions);
         startCameraButton = view.findViewById(R.id.take_picture_button);
@@ -88,6 +114,7 @@ public class RouterPictureFragment extends Fragment {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), bmOptions);
             apImageView.setImageBitmap(bitmap);
             showBottomSheetDialogFragment();
+            drawingEnabled = true;
         } else {
             Toast.makeText(getActivity(), "Error loading image file, please try again.",
                     Toast.LENGTH_LONG).show();
@@ -97,7 +124,7 @@ public class RouterPictureFragment extends Fragment {
 
     public void showBottomSheetDialogFragment() {
         imageAnalysisBottomSheet = new ImageAnalysisBottomSheet();
-        getChildFragmentManager().beginTransaction().replace(R.id.bottom_sheet, imageAnalysisBottomSheet);
+        getChildFragmentManager().beginTransaction().add(R.id.coordinator, imageAnalysisBottomSheet).commit();
         coordinator.setVisibility(View.VISIBLE);
     }
 
@@ -105,6 +132,8 @@ public class RouterPictureFragment extends Fragment {
         startCameraButton.show();
         tabDescription.setVisibility(View.VISIBLE);
         apImageView.setVisibility(View.GONE);
+        coordinator.setVisibility(View.GONE);
+        drawingEnabled = false;
     }
 
     private void openCamera() {

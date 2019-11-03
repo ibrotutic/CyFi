@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <com.example.cyfi.picture_tab.DrawImageView
         android:id="@+id/image_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,16 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
-        <View
-            android:id="@+id/shadow"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:background="@drawable/shadow_gradient"
-            app:layout_anchor="@id/bottom_sheet" />
-        <include
-            android:id="@+id/bottom_sheet"
-            android:visibility="visible"
-            layout="@layout/image_analysis"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
