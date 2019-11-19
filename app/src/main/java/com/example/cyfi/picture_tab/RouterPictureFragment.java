@@ -12,18 +12,17 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cyfi.R;
+import com.example.cyfi.utils.ExifUtil;
+import com.example.cyfi.utils.ObjectDistanceUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -53,6 +52,7 @@ public class RouterPictureFragment extends Fragment {
         super.onCreate(savedInstanceState);
         apImageViewModel = ViewModelProviders.of(this).get(ApImageViewModel.class);
         apImageViewModel.getImageFile().observe(this, this::fetchedNewImage);
+        apImageViewModel.getDrawMode().observe(this, drawMode -> drawingEnabled = drawMode);
     }
 
     @Override
@@ -89,6 +89,10 @@ public class RouterPictureFragment extends Fragment {
         return view;
     }
 
+    private void distanceCalculated(double distance) {
+        Toast.makeText(getActivity(), "Distance: " + distance + " mm", Toast.LENGTH_LONG).show();
+    }
+
     private void fetchedNewImage(File file) {
         if (file != null) {
             startCameraButton.hide();
@@ -106,19 +110,18 @@ public class RouterPictureFragment extends Fragment {
 
             // Determine how much to scale down the image
             int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+            apImageViewModel.setScalingFactor(4032/(ObjectDistanceUtil.getPixelsForDp(targetH)));
 
             // Decode the image file into a Bitmap sized to fill the View
             bmOptions.inJustDecodeBounds = false;
             bmOptions.inSampleSize = scaleFactor;
 
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), bmOptions);
-            apImageView.setImageBitmap(bitmap);
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            apImageView.setImageBitmap(ExifUtil.rotateBitmap(file.getAbsolutePath(), bitmap));
+            apImageView.setVisibility(View.VISIBLE);
             showBottomSheetDialogFragment();
-            drawingEnabled = true;
         } else {
-            Toast.makeText(getActivity(), "Error loading image file, please try again.",
-                    Toast.LENGTH_LONG).show();
-            apImageViewModel.resetViewModel();
+            resetState();
         }
     }
 
@@ -129,6 +132,7 @@ public class RouterPictureFragment extends Fragment {
     }
 
     private void resetState() {
+        getChildFragmentManager().beginTransaction().remove(imageAnalysisBottomSheet).commit();
         startCameraButton.show();
         tabDescription.setVisibility(View.VISIBLE);
         apImageView.setVisibility(View.GONE);
@@ -162,7 +166,7 @@ public class RouterPictureFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            apImageViewModel.setImageFile(imageLocation);
+            apImageViewModel.setImageFile(imageLocation, false);
         } else {
             Toast.makeText(getActivity(), "Error processing image file. Try again.", Toast.LENGTH_LONG).show();
         }
