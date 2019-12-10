@@ -45,10 +45,6 @@ public class NetworkInfoViewModel extends AndroidViewModel {
         wifiInfoData.setValue(wifiInfoItems);
     }
 
-//    public void updateWifiManager(Context context) {
-//        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-//    }
-
     public MutableLiveData<List<WifiInfoItem>> getWifiInfo() {
         return wifiInfoData;
     }

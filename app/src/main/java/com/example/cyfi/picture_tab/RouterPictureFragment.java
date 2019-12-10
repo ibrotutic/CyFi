@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cyfi.R;
@@ -34,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment that controls the image processing of the AP Info tab..
  */
 public class RouterPictureFragment extends Fragment {
     private boolean drawingEnabled = false;
@@ -53,6 +55,7 @@ public class RouterPictureFragment extends Fragment {
         apImageViewModel = ViewModelProviders.of(this).get(ApImageViewModel.class);
         apImageViewModel.getImageFile().observe(this, this::fetchedNewImage);
         apImageViewModel.getDrawMode().observe(this, drawMode -> drawingEnabled = drawMode);
+        apImageViewModel.getDistanceToObject().observe(this, this::getAPatDistance);
     }
 
     @Override
@@ -60,15 +63,15 @@ public class RouterPictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ap_picture, container, false);
         apImageView = view.findViewById(R.id.image_preview);
+
+        //Begin drawing event.
         apImageView.setOnTouchListener((v, event) -> {
             DrawImageView drawView = (DrawImageView) v;
 
             if (drawingEnabled) {
-                // set start coords
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     drawView.left = event.getX();
                     drawView.top = event.getY();
-                    // set end coords
                 } else {
                     drawView.right = event.getX();
                     drawView.bottom = event.getY();
@@ -89,10 +92,11 @@ public class RouterPictureFragment extends Fragment {
         return view;
     }
 
-    private void distanceCalculated(double distance) {
-        Toast.makeText(getActivity(), "Distance: " + distance + " mm", Toast.LENGTH_LONG).show();
-    }
-
+    /**
+     * Fetch image file and scale to view size.
+     * @param file
+     *  A file to get the image from.
+     */
     private void fetchedNewImage(File file) {
         if (file != null) {
             startCameraButton.hide();
@@ -125,12 +129,18 @@ public class RouterPictureFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates and shows the bottom sheet.
+     */
     public void showBottomSheetDialogFragment() {
         imageAnalysisBottomSheet = new ImageAnalysisBottomSheet();
         getChildFragmentManager().beginTransaction().add(R.id.coordinator, imageAnalysisBottomSheet).commit();
         coordinator.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Reset state of fragment.
+     */
     private void resetState() {
         getChildFragmentManager().beginTransaction().remove(imageAnalysisBottomSheet).commit();
         startCameraButton.show();
@@ -140,6 +150,9 @@ public class RouterPictureFragment extends Fragment {
         drawingEnabled = false;
     }
 
+    /**
+     * Opens camera to get picture.
+     */
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -149,7 +162,7 @@ public class RouterPictureFragment extends Fragment {
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                Toast.makeText(getActivity(), "Error making image file. Try again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Error making image file. Try again. Ensure permissions are given.", Toast.LENGTH_LONG).show();
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -162,7 +175,6 @@ public class RouterPictureFragment extends Fragment {
             }
         }
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
@@ -172,6 +184,13 @@ public class RouterPictureFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates an image file.
+     * @return
+     *  A file reprenting the image.
+     * @throws IOException
+     *  If permissions aren't given.
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -182,6 +201,16 @@ public class RouterPictureFragment extends Fragment {
                 ".jpg",         // suffix
                 storageDir      // directory
         );
+    }
+
+    /**
+     * Creates dialog for the AP after the distance was calculated.
+     * @param distance
+     */
+    private void getAPatDistance(Double distance) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        DialogFragment dialogFragment = APInformationFragment.newInstance(distance);
+        dialogFragment.show(ft, APInformationFragment.TAG);
     }
 
 }

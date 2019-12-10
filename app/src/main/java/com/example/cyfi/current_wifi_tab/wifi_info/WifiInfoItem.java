@@ -38,5 +38,5 @@ public abstract class WifiInfoItem {
         }
     }
 
-    abstract String getWifiItemValue(WifiInfo wifiInfo);
+    public abstract String getWifiItemValue(WifiInfo wifiInfo);
 }

@@ -1,6 +1,7 @@
 package com.example.cyfi;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -19,10 +20,17 @@ import com.example.cyfi.current_wifi_tab.NetworkInfoViewModel;
 import com.example.cyfi.picture_tab.RouterPictureFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * The main activity. This handles all tool bar interactions and switching tabs.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION = 1;
     private static final int WIFI_STATE_PERMISSION = 1;
+
+    /**
+     * Set up toolbars and fragments.
+     */
     private Toolbar toolbar;
     final Fragment currentConnectionFragment = new CurrentWifiFragment();
     final Fragment routerFragment = new RouterPictureFragment();
@@ -58,22 +66,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check for permissions.
+     */
     private void checkAndRequestPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = {
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_WIFI_STATE,
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+        };
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_WIFI_STATE}, WIFI_STATE_PERMISSION);
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 2);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
-        }
+        return true;
     }
 
 
@@ -89,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.setTitle(R.string.current_connection_information);
                     return true;
 
-                case R.id.scan_networks:
-                    fm.beginTransaction().hide(displayedFragment).show(scanNetworksFragment).commit();
-                    displayedFragment = scanNetworksFragment;
-                    toolbar.setTitle(R.string.recommend_a_network);
-                    return true;
+//                case R.id.scan_networks:
+//                    fm.beginTransaction().hide(displayedFragment).show(scanNetworksFragment).commit();
+//                    displayedFragment = scanNetworksFragment;
+//                    toolbar.setTitle(R.string.recommend_a_network);
+//                    return true;
 
                 case R.id.router_info:
                     fm.beginTransaction().hide(displayedFragment).show(routerFragment).commit();

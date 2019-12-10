@@ -10,7 +10,7 @@ public class LinkSpeedItem extends WifiInfoItem {
     }
 
     @Override
-    String getWifiItemValue(WifiInfo wifiInfo) {
+    public String getWifiItemValue(WifiInfo wifiInfo) {
         return String.format("%d %s", wifiInfo.getLinkSpeed(), wifiInfo.LINK_SPEED_UNITS);
     }
 }

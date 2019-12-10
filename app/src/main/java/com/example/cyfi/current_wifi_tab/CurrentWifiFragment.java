@@ -16,6 +16,7 @@ import com.example.cyfi.R;
 import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,6 +53,19 @@ public class CurrentWifiFragment extends Fragment {
         networkInfoViewModel.updateWifiInfo();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        wifiInfo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        wifiInfo.setVisibility(View.GONE);
+    }
+
     private void updateWifiInfoView(List<WifiInfoItem> wifiInfoItems) {
         if (wifiInfoItems == null) {
             if (progressBar.getVisibility() == View.VISIBLE) {
@@ -66,7 +80,7 @@ public class CurrentWifiFragment extends Fragment {
         }
         getCurrentWifiInfoButton.setEnabled(true);
         if (wifiInfoAdapter == null) {
-            wifiInfoAdapter = new WifiInfoAdapter(null);
+            wifiInfoAdapter = new WifiInfoAdapter(new ArrayList<>());
             this.wifiInfo.setAdapter(wifiInfoAdapter);
             this.wifiInfo.setLayoutManager(new LinearLayoutManager(getContext()));
         } else {

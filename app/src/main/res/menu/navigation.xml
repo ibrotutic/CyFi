@@ -5,12 +5,6 @@
         android:id="@+id/current_connection"
         android:icon="@drawable/ic_current_arrows_black_24dp"
         android:title="@string/current" />
-
-    <item
-        android:id="@+id/scan_networks"
-        android:icon="@drawable/ic_wifi_black_24dp"
-        android:title="@string/comparison" />
-
     <item
         android:id="@+id/router_info"
         android:icon="@drawable/ic_router_black_24dp"

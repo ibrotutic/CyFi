@@ -11,7 +11,7 @@ public class SupplicantStateItem extends WifiInfoItem {
     }
 
     @Override
-    String getWifiItemValue(WifiInfo wifiInfo) {
+    public String getWifiItemValue(WifiInfo wifiInfo) {
         return wifiInfo.getSupplicantState().name();
     }
 }

@@ -11,7 +11,7 @@ public class SignalStrengthItem extends WifiInfoItem {
     }
 
     @Override
-    String getWifiItemValue(WifiInfo wifiInfo) {
+    public String getWifiItemValue(WifiInfo wifiInfo) {
         int level = WifiManager.calculateSignalLevel(wifiInfo.getRssi(), 10);
         return String.format("%d / 10", level);
     }
