@@ -22,6 +22,9 @@ import com.example.cyfi.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 
+/**
+ * Bottom sheet that allows the user to enter information about their devices.
+ */
 public class ImageAnalysisBottomSheet extends Fragment {
     private ApImageViewModel apImageViewModel;
     private BottomSheetBehavior sheetBehavior;
@@ -41,15 +44,30 @@ public class ImageAnalysisBottomSheet extends Fragment {
         apImageViewModel.getDistanceToObject().observe(this, this::distanceCalculated);
     }
 
+    /**
+     * Show distance.
+     * @param distance
+     *  Distance in mm.
+     */
     private void distanceCalculated(Double distance) {
         double distanceInCm = distance/10;
         this.distanceText.setText(distanceInCm + " cm");
     }
 
+    /**
+     * Show object width in pixels.
+     * @param width
+     *  Width of object in pixels.
+     */
     private void objectPixelWidth(Float width) {
         this.objectPixelWidth.setText(String.format("%.2f", width));
     }
 
+    /**
+     * Show object height in pixels.
+     * @param height
+     *  Height of object in pixels.
+     */
     private void objectPixelHeight(Float height) {
         this.objectPixelHeight.setText(String.format("%.2f", height));
     }

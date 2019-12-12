@@ -14,6 +14,10 @@ import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 
 import java.util.List;
 
+/**
+ * Adapter for efficient storage of list data. Coverts objects to views and recylces the same
+ * x cells.
+ */
 public class WifiInfoAdapter extends
         RecyclerView.Adapter<WifiInfoAdapter.ViewHolder> {
 

@@ -1,6 +1,5 @@
 package com.example.cyfi;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     final Fragment currentConnectionFragment = new CurrentWifiFragment();
     final Fragment routerFragment = new RouterPictureFragment();
-    final Fragment scanNetworksFragment = new ScanNetworksFragment();
     final FragmentManager fm = getSupportFragmentManager();
     Fragment displayedFragment = currentConnectionFragment;
 
@@ -50,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        fm.beginTransaction().add(R.id.main_container, scanNetworksFragment, "scan-networks").hide(scanNetworksFragment).commit();
         fm.beginTransaction().add(R.id.main_container, routerFragment, "router-info").hide(routerFragment).commit();
         fm.beginTransaction().add(R.id.main_container, currentConnectionFragment, "current-connection").commit();
         checkAndRequestPermissions();
@@ -76,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 android.Manifest.permission.ACCESS_WIFI_STATE,
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_NETWORK_STATE
         };
 
         if (!hasPermissions(this, PERMISSIONS)) {
@@ -96,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Set up fragments and navigation.
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -107,12 +108,6 @@ public class MainActivity extends AppCompatActivity {
                     displayedFragment = currentConnectionFragment;
                     toolbar.setTitle(R.string.current_connection_information);
                     return true;
-
-//                case R.id.scan_networks:
-//                    fm.beginTransaction().hide(displayedFragment).show(scanNetworksFragment).commit();
-//                    displayedFragment = scanNetworksFragment;
-//                    toolbar.setTitle(R.string.recommend_a_network);
-//                    return true;
 
                 case R.id.router_info:
                     fm.beginTransaction().hide(displayedFragment).show(routerFragment).commit();

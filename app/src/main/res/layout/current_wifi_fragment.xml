@@ -30,6 +30,21 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
+        android:id="@+id/list_instructions"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:fontFamily="sans-serif-black"
+        android:textSize="28sp"
+        android:text="Connect to an access point and click the refresh button to see current connection details."
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
         android:id="@+id/press_button_for_current_wifi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

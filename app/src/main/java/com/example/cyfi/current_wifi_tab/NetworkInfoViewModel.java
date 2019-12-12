@@ -2,8 +2,11 @@ package com.example.cyfi.current_wifi_tab;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
@@ -21,7 +24,9 @@ import com.example.cyfi.current_wifi_tab.wifi_info.WifiInfoItem;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Manage current wifi fragment data.
+ */
 public class NetworkInfoViewModel extends AndroidViewModel {
     private WifiManager wifiManager;
     private MutableLiveData<List<WifiInfoItem>> wifiInfoData = new MutableLiveData<>();
@@ -32,6 +37,9 @@ public class NetworkInfoViewModel extends AndroidViewModel {
         initializeCurrentWifiInformation();
     }
 
+    /**
+     * Initialize data with their objects.
+     */
     private void initializeCurrentWifiInformation() {
         List<WifiInfoItem> wifiInfoItems = new ArrayList<>();
         wifiInfoItems.add(new SupplicantStateItem(""));
@@ -49,6 +57,9 @@ public class NetworkInfoViewModel extends AndroidViewModel {
         return wifiInfoData;
     }
 
+    /**
+     * Use wifi manager to update list of data calling refresh().
+     */
     public void updateWifiInfo() {
         List<WifiInfoItem> wifiInfoItems = wifiInfoData.getValue();
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -57,6 +68,5 @@ public class NetworkInfoViewModel extends AndroidViewModel {
         }
         wifiInfoData.postValue(wifiInfoItems);
     }
-
 
 }

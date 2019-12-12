@@ -1,5 +1,9 @@
 package com.example.cyfi.constants;
 
+/**
+ * Used for various constants.
+ */
+
 public final class NetworkInfoConstants {
 
     public static final String BSSID = "BSSID";

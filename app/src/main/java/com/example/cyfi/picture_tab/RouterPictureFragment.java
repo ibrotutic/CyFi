@@ -208,9 +208,13 @@ public class RouterPictureFragment extends Fragment {
      * @param distance
      */
     private void getAPatDistance(Double distance) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        DialogFragment dialogFragment = APInformationFragment.newInstance(distance);
-        dialogFragment.show(ft, APInformationFragment.TAG);
+        if (!Double.isNaN(distance)) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            DialogFragment dialogFragment = APInformationFragment.newInstance(distance);
+            dialogFragment.show(ft, APInformationFragment.TAG);
+        } else {
+            Toast.makeText(getActivity(), "Make sure dimensions are set and the box is drawn. Try again.", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

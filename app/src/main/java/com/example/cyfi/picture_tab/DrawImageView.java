@@ -5,6 +5,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+/**
+ * Custom view to allow a user to draw over a picture.
+ */
 public class DrawImageView extends ImageView {
     private Paint currentPaint;
     public boolean drawRect = false;
@@ -13,6 +16,7 @@ public class DrawImageView extends ImageView {
     public float right;
     public float bottom;
 
+    //Sets the values of the paint object on this class.
     public DrawImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -25,6 +29,7 @@ public class DrawImageView extends ImageView {
         currentPaint.setStrokeWidth(2);
     }
 
+    //Draw the point.
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

@@ -10,6 +10,9 @@ import com.example.cyfi.utils.ObjectDistanceUtil;
 
 import java.io.File;
 
+/**
+ * Control the image view model and the distance data.
+ */
 public class ApImageViewModel extends AndroidViewModel {
     private float scalingFactor = 0;
 
@@ -29,6 +32,13 @@ public class ApImageViewModel extends AndroidViewModel {
         return imageFile;
     }
 
+    /**
+     * Sets image file on the view model for future viewing.
+     * @param imageUrl
+     *  Image file.
+     * @param isError
+     *  If an error occured.
+     */
     public void setImageFile(File imageUrl, boolean isError) {
         if (isError) {
             resetViewModel();
@@ -37,6 +47,9 @@ public class ApImageViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Reset view model to new.
+     */
     public void resetViewModel() {
         imageFile.setValue(null);
         objectPixelWidth.setValue(0f);
@@ -45,12 +58,24 @@ public class ApImageViewModel extends AndroidViewModel {
         objectHeight = 0f;
     }
 
+    /**
+     * Set coordinates of box on the screen.
+     * @param top
+     *  Top coord.
+     * @param bottom
+     *  Bottom cord.
+     * @param left
+     *  Left Cord.
+     * @param right
+     * Right Cord.
+     */
     public void setCoordinates(float top, float bottom, float left, float right) {
         float objectHeight = ObjectDistanceUtil.getPixelsForDp(Math.max(bottom, top) - Math.min(bottom,top));
         this.objectPixelHeight.setValue(objectHeight);
         this.objectPixelWidth.setValue(ObjectDistanceUtil.getPixelsForDp(Math.max(left, right) - Math.min(left,right)));
     }
 
+    //Getters and setters for live data.
     public MutableLiveData<Float> getObjectPixelWidth() {
         return objectPixelWidth;
     }
@@ -61,10 +86,6 @@ public class ApImageViewModel extends AndroidViewModel {
 
     public MutableLiveData<Double> getDistanceToObject() {
         return distanceToObject;
-    }
-
-    public float getScalingFactor() {
-        return scalingFactor;
     }
 
     public void setScalingFactor(float scalingFactor) {
@@ -83,6 +104,7 @@ public class ApImageViewModel extends AndroidViewModel {
         this.drawMode.setValue(enabled);
     }
 
+    //computes the distance.
     public void computeDistance() {
         double distance = ObjectDistanceUtil.objectDistanceInMillimeters(this.objectHeight, 4032, scalingFactor * objectPixelHeight.getValue());
         distanceToObject.setValue(distance);

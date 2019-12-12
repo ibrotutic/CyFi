@@ -24,6 +24,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A pop up fragment that contains information about the access point.
+ */
 public class APInformationFragment extends DialogFragment {
     public static String TAG = APInformationFragment.class.getName();
     private Double distanceToAP = 0.0;
@@ -34,6 +37,7 @@ public class APInformationFragment extends DialogFragment {
     private TextView distanceText;
     private WifiInfoAdapter wifiInfoAdapter = new WifiInfoAdapter(new ArrayList<>());
 
+    //initialize it with the given distance.
     public static APInformationFragment newInstance(Double distance) {
         APInformationFragment dialog = new APInformationFragment();
         Bundle args = new Bundle();
@@ -69,6 +73,9 @@ public class APInformationFragment extends DialogFragment {
                 .create();
     }
 
+    /**
+     * Get the closest wifi signal and show its information.
+     */
     private void getWifiInfo() {
         final WifiManager wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         List<ScanResult> routers = wifiManager.getScanResults();
@@ -94,6 +101,13 @@ public class APInformationFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Channel width mapping.
+     * @param closestAP
+     *  The closest access point determined by the signal strength/frequency.
+     * @return
+     *  The channel width.
+     */
     private String getChannelWidth(ScanResult closestAP) {
         int width = closestAP.channelWidth;
         switch (width) {
@@ -112,6 +126,15 @@ public class APInformationFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Uses a variation of the free space path loss formula.
+     * @param signalLevelInDb
+     *  Signal level.
+     * @param freqInMHz
+     *  Frequency.
+     * @return
+     *  "Distance" in meters. Just used as a gut check.
+     */
     private double calculateDistance(double signalLevelInDb, double freqInMHz) {
         double exp = (27.55 - (20 * Math.log10(freqInMHz)) + Math.abs(signalLevelInDb)) / 20.0;
         return Math.pow(10.0, exp);

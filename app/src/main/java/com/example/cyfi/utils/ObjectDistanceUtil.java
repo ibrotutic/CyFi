@@ -2,6 +2,9 @@ package com.example.cyfi.utils;
 
 import android.content.res.Resources;
 
+/**
+ * Utilities to calculate distance to object from the camera sensor dimensions.
+ */
 public class ObjectDistanceUtil {
     private static float focalLength = 27; //in mm
     private static double sensorHeight = 4.1; //in mm
